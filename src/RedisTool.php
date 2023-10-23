@@ -57,7 +57,6 @@ class RedisTool
 
     public function setIndex(string $indexKey, string $value) 
     {
-        if (!$this->isConnected()) return false;
         return $this->setValue($indexKey, $value);
     }
 
