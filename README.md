@@ -1,2 +1,2 @@
-# fiesta-redis-tool
+# Fiesta-redis-tool
 A library for easily manipulating phpredis

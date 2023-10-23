@@ -1,0 +1,25 @@
+{
+    "name": "carry0987/fiesta-redis-tool",
+    "description": "A library for easily manipulating phpredis",
+    "keywords": ["redis"],
+    "type": "library",
+    "require": {
+        "php": ">=7.2"
+    },
+    "require-dev": {
+        "php": ">=7.2"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "carry0987\\Fiesta\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "carry0987"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
