@@ -35,7 +35,7 @@ class RedisTool
             $status = $this->redis->ping();
             return $status == '+PONG';
         } catch (RedisException $e) {
-            throw new Exception($e->getMessage());
+            return false;
         }
     }
 
