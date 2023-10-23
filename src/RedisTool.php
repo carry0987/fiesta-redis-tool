@@ -12,6 +12,7 @@ class RedisTool
     public function __construct(string $host, int $port, string $pwd, mixed $database, int $retryTimes = 3)
     {
         if (!class_exists('Redis')) throw new Exception('Class Redis does not exist !');
+        $this->retryTimes = $retryTimes;
         try {
             $this->redis = new \Redis();
             $count = 0;
@@ -43,10 +44,10 @@ class RedisTool
         return $this->redis;
     }
 
-    public function setValue($key, $value, $ttl = null)
+    public function setValue($key, $value, int $ttl = 86400)
     {
         if (!$this->isConnected()) return false;
-        if ($ttl) {
+        if ($ttl !== null) {
             $status = $this->redis->setex($key, $ttl, $value);
         } else {
             $status = $this->redis->set($key, $value);
@@ -60,13 +61,15 @@ class RedisTool
         return $this->setValue($indexKey, $value);
     }
 
-    public function setHashValue($hash, $key, $value, $ttl = null)
+    public function setHashValue($hash, $key, $value, int $ttl = 86400)
     {
         if (!$this->isConnected()) return false;
-        $status = $this->redis->hSet($hash, $key, $value);
-        if ($status !== false && $ttl) {
+        $this->redis->multi();
+        $this->redis->hSet($hash, $key, $value);
+        if ($ttl !== null) { 
             $this->redis->expire($hash, $ttl);
         }
+        $status = $this->redis->exec();
         return $status !== false;
     }
 
