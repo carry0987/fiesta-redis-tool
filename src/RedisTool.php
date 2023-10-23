@@ -19,7 +19,7 @@ class RedisTool
             while (!$this->redis->connect($host, $port) && $count < $this->retryTimes) {
                 $count++;
             }
-            if (!$this->redis->connect($host, $port)) {
+            if ($count >= $this->retryTimes) {
                 throw new Exception('Unable to connect to Redis');
             }
             $this->redis->auth($pwd);
