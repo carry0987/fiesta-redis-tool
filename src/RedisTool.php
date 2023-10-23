@@ -75,16 +75,19 @@ class RedisTool
 
     public function getValue($key)
     {
+        if (!$this->isConnected()) return false;
         return $this->redis->get($key);
     }
 
     public function getHashValue($hash, $key)
     {
+        if (!$this->isConnected()) return false;
         return $this->redis->hGet($hash, $key);
     }
 
     public function getAllHash($hash)
     {
+        if (!$this->isConnected()) return false;
         return $this->redis->hGetAll($hash);
     }
 
@@ -102,6 +105,7 @@ class RedisTool
 
     public function flushDatabase()
     {
+        if (!$this->isConnected()) return false;
         return $this->redis->flushDb();
     }
 
