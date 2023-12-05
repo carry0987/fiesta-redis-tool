@@ -9,7 +9,7 @@ class RedisTool
     private $redis = null;
     private $retryTimes;
 
-    public function __construct(string $host, int $port, string $pwd, mixed $database, int $retryTimes = 3)
+    public function __construct(string $host, int $port, string $pwd, $database, int $retryTimes = 3)
     {
         if (!class_exists('Redis')) throw new Exception('Class Redis does not exist !');
         $this->retryTimes = $retryTimes;
@@ -44,7 +44,7 @@ class RedisTool
         return $this->redis;
     }
 
-    public function setValue($key, $value, int $ttl = 86400)
+    public function setValue(string $key, $value, int $ttl = 86400)
     {
         if (!$this->isConnected()) return false;
         if ($ttl !== null) {
@@ -52,6 +52,7 @@ class RedisTool
         } else {
             $status = $this->redis->set($key, $value);
         }
+
         return $status === true;
     }
 
@@ -60,7 +61,7 @@ class RedisTool
         return $this->setValue($indexKey, $value);
     }
 
-    public function setHashValue($hash, $key, $value, int $ttl = 86400)
+    public function setHashValue(string $hash, string $key, $value, int $ttl = 86400)
     {
         if (!$this->isConnected()) return false;
         $this->redis->multi();
@@ -69,46 +70,53 @@ class RedisTool
             $this->redis->expire($hash, $ttl);
         }
         $status = $this->redis->exec();
+
         return $status !== false;
     }
 
-    public function getValue($key)
+    public function getValue(string $key)
     {
         if (!$this->isConnected()) return false;
+
         return $this->redis->get($key);
     }
 
-    public function getHashValue($hash, $key)
+    public function getHashValue(string $hash, string $key)
     {
         if (!$this->isConnected()) return false;
+
         return $this->redis->hGet($hash, $key);
     }
 
-    public function getAllHash($hash)
+    public function getAllHash(string $hash)
     {
         if (!$this->isConnected()) return false;
+
         return $this->redis->hGetAll($hash);
     }
 
-    public function deleteValue($key)
+    public function deleteValue(string $key)
     {
         if (!$this->isConnected()) return false;
+
         return (bool) $this->redis->del($key);
     }
 
-    public function exists($key)
+    public function exists(string $key)
     {
         if (!$this->isConnected()) return false;
+
         return (bool) $this->redis->exists($key);
     }
 
     public function flushDatabase()
     {
         if (!$this->isConnected()) return false;
+
         return $this->redis->flushDb();
     }
 
-    public function keys($pattern)
+    public function keys(string $pattern)
     {
         if (!$this->isConnected()) return array();
 
@@ -123,6 +131,7 @@ class RedisTool
                 $keys[] = $key;
             }
         }
+
         return $keys;
     }
 }
